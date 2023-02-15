@@ -1,6 +1,9 @@
 package com.example.alarmapplication
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.alarmapplication.fragments.TimePickerFragment
 
 
@@ -21,6 +25,12 @@ class MainActivity : AppCompatActivity(), TimePickerFragment.OnTimeSetListener {
     private var min: Int = 0
     private var timeString: String = ""
 
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            // ...
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -31,10 +41,9 @@ class MainActivity : AppCompatActivity(), TimePickerFragment.OnTimeSetListener {
             showTimePicker()
         }
 
-        val intent = Intent(this, StartService::class.java)
-
         btStart = findViewById(R.id.btStart)
         btStart.setOnClickListener{
+            val intent = Intent(this, StartService::class.java)
             intent.putExtra("hour", hour)
             intent.putExtra("minute", min)
             Toast.makeText(applicationContext, "Service Started!", Toast.LENGTH_SHORT).show()
@@ -42,8 +51,14 @@ class MainActivity : AppCompatActivity(), TimePickerFragment.OnTimeSetListener {
             startService(intent)
         }
 
+        val filter = IntentFilter(StartService.ACTION_STOP_SERVICE)
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter)
+
         btStop = findViewById(R.id.btStop)
         btStop.setOnClickListener{
+            val intent = Intent()
+            intent.setClass(this, StartService::class.java)
+            intent.action = StartService.ACTION_STOP_SERVICE
             Toast.makeText(applicationContext, "Service Stopped!", Toast.LENGTH_SHORT).show()
             Log.i("Service Status","Service Stopped!")
             stopService(intent)
@@ -59,8 +74,14 @@ class MainActivity : AppCompatActivity(), TimePickerFragment.OnTimeSetListener {
     override fun onTimeSet(hourOfDay: Int, minute: Int) {
         hour = hourOfDay
         min = minute
-        timeString = String.format("%02d:%02d", hourOfDay, minute)
+        timeString = String.format("Alarm set for %02d:%02d", hourOfDay, minute)
         Toast.makeText(applicationContext, timeString, Toast.LENGTH_SHORT).show()
         Log.i("Time selected: ",timeString)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Unregister the broadcast receiver
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
     }
 }
