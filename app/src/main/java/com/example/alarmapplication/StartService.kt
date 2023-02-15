@@ -5,6 +5,7 @@ import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.icu.text.SimpleDateFormat
 import android.media.AudioManager
 import android.media.Ringtone
@@ -24,6 +25,7 @@ class StartService : Service() {
     private var ringtone: Ringtone? = null
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
+    private val batteryLevelReceiver = BatteryLevelReceiver()
 
     companion object {
         const val ACTION_STOP_SERVICE = "com.your.package.action.STOP_SERVICE"
@@ -34,9 +36,6 @@ class StartService : Service() {
         if(alreadyPlayingRingtone){
             return
         }
-//        val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-//        ringtone = RingtoneManager.getRingtone(applicationContext, ringtoneUri)
-
         val calendar = Calendar.getInstance()
         val currHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currMinute = calendar.get(Calendar.MINUTE)
@@ -64,6 +63,10 @@ class StartService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val inputHour = intent?.getIntExtra("hour", 0)
         val inputMinutes = intent?.getIntExtra("minute", 0)
+        val batteryLevelFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_BATTERY_LOW)
+        }
+        registerReceiver(batteryLevelReceiver, batteryLevelFilter)
         handler = Handler(Looper.getMainLooper())
         runnable = object : Runnable {
             override fun run() {
@@ -83,6 +86,7 @@ class StartService : Service() {
         Toast.makeText(applicationContext, "Service Destroyed!", Toast.LENGTH_SHORT).show()
         Log.i("ServiceUpdate", "Service Destroyed!")
         handler.removeCallbacks(runnable)
+        unregisterReceiver(batteryLevelReceiver)
         ringtone?.stop()
         stopSelf()
         stopService(intent)
