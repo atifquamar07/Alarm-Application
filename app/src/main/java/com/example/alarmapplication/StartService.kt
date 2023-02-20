@@ -25,6 +25,8 @@ class StartService : Service() {
     private var ringtone: Ringtone? = null
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
+    private var hourPlayed: Int = 0
+    private var minutePlayed: Int = 0
     private val batteryLevelReceiver = BatteryLevelReceiver()
 
     companion object {
@@ -33,14 +35,15 @@ class StartService : Service() {
 
     @SuppressLint("ServiceCast")
     private fun checkTimeAndStartRingtone(inputHour: Int, inputMinutes: Int) {
-        if(alreadyPlayingRingtone){
-            return
-        }
         val calendar = Calendar.getInstance()
         val currHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currMinute = calendar.get(Calendar.MINUTE)
         val currTimeString = String.format("%02d:%02d ", currHour, currMinute)
         Log.i("Curr Time", currTimeString)
+
+        if(alreadyPlayingRingtone && currHour == hourPlayed && currMinute == minutePlayed){
+            return
+        }
 
         val handler = Handler(Looper.getMainLooper())
 
@@ -51,18 +54,22 @@ class StartService : Service() {
             Toast.makeText(applicationContext, "Alarm Started!", Toast.LENGTH_SHORT).show()
             Log.i("Alarm", "Alarm Started!")
             ringtone?.play()
+            hourPlayed = currHour
+            minutePlayed = currMinute
             handler.postDelayed({
                 ringtone?.stop()
                 Toast.makeText(applicationContext, "Alarm Stopped after 10 secs!", Toast.LENGTH_SHORT).show()
                 Log.i("Alarm", "Alarm Stopped after 10 secs!")
-                stopSelf()
+//                stopSelf()
             }, 10000) // stop after 10 seconds
         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val inputHour = intent?.getIntExtra("hour", 0)
-        val inputMinutes = intent?.getIntExtra("minute", 0)
+        val inputHour1 = intent?.getIntExtra("hour1", 0)
+        val inputMinutes1 = intent?.getIntExtra("minute1", 0)
+        val inputHour2 = intent?.getIntExtra("hour2", 0)
+        val inputMinutes2 = intent?.getIntExtra("minute2", 0)
         val batteryLevelFilter = IntentFilter().apply {
             addAction(Intent.ACTION_BATTERY_LOW)
         }
@@ -70,8 +77,11 @@ class StartService : Service() {
         handler = Handler(Looper.getMainLooper())
         runnable = object : Runnable {
             override fun run() {
-                if (inputHour != null && inputMinutes != null) {
-                    checkTimeAndStartRingtone(inputHour, inputMinutes)
+                if (inputHour1 != null && inputMinutes1 != null) {
+                    checkTimeAndStartRingtone(inputHour1, inputMinutes1)
+                }
+                if (inputHour2 != null && inputMinutes2 != null) {
+                    checkTimeAndStartRingtone(inputHour2, inputMinutes2)
                 }
                 handler.postDelayed(this, 10000) // 10 seconds
             }
