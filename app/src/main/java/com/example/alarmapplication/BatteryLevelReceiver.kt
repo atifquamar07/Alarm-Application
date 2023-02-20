@@ -24,7 +24,7 @@ class BatteryLevelReceiver : BroadcastReceiver() {
             counter += 1
         }
 
-        if (counter >= 2) {
+        if (counter >= 1) {
             val stopServiceIntent = Intent(context, StartService::class.java).apply {
 //                Toast.makeText(, "Service Stopped, Broadcast!", Toast.LENGTH_SHORT).show()
                 Log.i("Service Status","Service Stopped due to broadcast message!")
