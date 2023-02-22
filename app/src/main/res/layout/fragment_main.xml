@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/str_mainFragmentID"
+    android:layout_width="match_parent"
+    android:background="@color/black"
+    android:layout_height="match_parent"
+    tools:context=".fragments.MainFragment">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:text="@string/str_alarms"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"/>
+
+    <ImageButton
+        android:id="@+id/add_icon"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="120dp"
+        android:src="@drawable/add_icon" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/str_addAlarm"
+        android:textColor="@color/white"
+        android:layout_marginTop="290dp"
+        android:textSize="26sp" />
+
+
+    <Button
+        android:id="@+id/btStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="450sp"
+        android:padding="20dp"
+        android:gravity="center_horizontal"
+        android:text="@string/str_startService"
+        android:textAlignment="center"
+        android:textSize="19sp"
+        tools:ignore="RtlSymmetry" />
+
+    <Button
+        android:id="@+id/btStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_stopService"
+        android:layout_marginTop="550sp"
+        android:gravity="center_horizontal"
+        android:layout_marginStart="110dp"
+        android:padding="20dp"
+        android:textSize="19sp"
+        tools:ignore="RtlSymmetry" />
+
+</FrameLayout>

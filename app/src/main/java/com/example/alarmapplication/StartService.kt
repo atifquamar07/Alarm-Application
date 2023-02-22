@@ -28,6 +28,7 @@ class StartService : Service() {
     private var hourPlayed: Int = 0
     private var minutePlayed: Int = 0
     private val batteryLevelReceiver = BatteryLevelReceiver()
+    private var timeString: String = ""
 
     companion object {
         const val ACTION_STOP_SERVICE = "com.your.package.action.STOP_SERVICE"
@@ -60,7 +61,6 @@ class StartService : Service() {
                 ringtone?.stop()
                 Toast.makeText(applicationContext, "Alarm Stopped after 10 secs!", Toast.LENGTH_SHORT).show()
                 Log.i("Alarm", "Alarm Stopped after 10 secs!")
-//                stopSelf()
             }, 10000) // stop after 10 seconds
         }
     }
@@ -70,6 +70,8 @@ class StartService : Service() {
         val inputMinutes1 = intent?.getIntExtra("minute1", 0)
         val inputHour2 = intent?.getIntExtra("hour2", 0)
         val inputMinutes2 = intent?.getIntExtra("minute2", 0)
+        timeString = String.format("Time received are %02d:%02d and %02d:%02d", inputHour1, inputMinutes1, inputHour2, inputMinutes2)
+        Log.i("time received", timeString)
         val batteryLevelFilter = IntentFilter().apply {
             addAction(Intent.ACTION_BATTERY_LOW)
         }
