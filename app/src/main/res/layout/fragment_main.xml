@@ -39,12 +39,12 @@
 
     <Button
         android:id="@+id/btStart"
-        android:layout_width="wrap_content"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="105dp"
-        android:layout_marginTop="450sp"
-        android:padding="20dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="440sp"
         android:gravity="center_horizontal"
+        android:padding="20dp"
         android:text="@string/str_startService"
         android:textAlignment="center"
         android:textSize="19sp"
@@ -52,14 +52,57 @@
 
     <Button
         android:id="@+id/btStop"
-        android:layout_width="wrap_content"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:text="@string/str_stopService"
-        android:layout_marginTop="550sp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="530sp"
         android:gravity="center_horizontal"
-        android:layout_marginStart="110dp"
         android:padding="20dp"
+        android:text="@string/str_stopService"
         android:textSize="19sp"
         tools:ignore="RtlSymmetry" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="625dp"
+        android:layout_height="117dp"
+        android:id="@+id/layout_id"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/id_listalarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:text="@string/str_list_of_alarms"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/id_alarm1"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/alarm_1"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/id_alarm2"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/alarm_2"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
 
 </FrameLayout>

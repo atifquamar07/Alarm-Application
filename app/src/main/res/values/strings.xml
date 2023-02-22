@@ -7,5 +7,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="str_addAlarm">Add Alarm</string>
     <string name="str_mainFragmentID">mainFragmentID</string>
+    <string name="str_show_alarms">SHOW ALARMS</string>
+    <string name="str_listAlarms">List of Alarms</string>
+    <string name="str_list_of_alarms">List of Alarms</string>
+    <string name="alarm_1">Alarm 1</string>
+    <string name="alarm_2">Alarm 2</string>
 
 </resources>

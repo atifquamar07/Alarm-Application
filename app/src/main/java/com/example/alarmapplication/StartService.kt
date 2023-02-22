@@ -11,6 +11,7 @@ import android.media.AudioManager
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.BatteryManager
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
@@ -27,8 +28,10 @@ class StartService : Service() {
     private lateinit var runnable: Runnable
     private var hourPlayed: Int = 0
     private var minutePlayed: Int = 0
-    private val batteryLevelReceiver = BatteryLevelReceiver()
     private var timeString: String = ""
+
+    private val powerConnectionReceiver = PowerConnectionReceiver()
+    private val batteryLevelReceiver = BatteryLevelReceiver()
 
     companion object {
         const val ACTION_STOP_SERVICE = "com.your.package.action.STOP_SERVICE"
@@ -47,6 +50,18 @@ class StartService : Service() {
         }
 
         val handler = Handler(Looper.getMainLooper())
+
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_POWER_CONNECTED)
+            addAction(Intent.ACTION_POWER_DISCONNECTED)
+        }
+        registerReceiver(powerConnectionReceiver, filter)
+
+        val filterBattery = IntentFilter().apply {
+            addAction(Intent.ACTION_BATTERY_CHANGED)
+        }
+        registerReceiver(batteryLevelReceiver, filterBattery)
+
 
         if (currHour == inputHour && currMinute == inputMinutes) {
             alreadyPlayingRingtone = true
@@ -72,10 +87,7 @@ class StartService : Service() {
         val inputMinutes2 = intent?.getIntExtra("minute2", 0)
         timeString = String.format("Time received are %02d:%02d and %02d:%02d", inputHour1, inputMinutes1, inputHour2, inputMinutes2)
         Log.i("time received", timeString)
-        val batteryLevelFilter = IntentFilter().apply {
-            addAction(Intent.ACTION_BATTERY_LOW)
-        }
-        registerReceiver(batteryLevelReceiver, batteryLevelFilter)
+
         handler = Handler(Looper.getMainLooper())
         runnable = object : Runnable {
             override fun run() {
@@ -99,6 +111,7 @@ class StartService : Service() {
         Log.i("ServiceUpdate", "Service Destroyed!")
         handler.removeCallbacks(runnable)
         unregisterReceiver(batteryLevelReceiver)
+        unregisterReceiver(powerConnectionReceiver)
         ringtone?.stop()
         stopSelf()
         stopService(intent)
