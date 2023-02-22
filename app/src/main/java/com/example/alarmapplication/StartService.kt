@@ -67,8 +67,9 @@ class StartService : Service() {
             alreadyPlayingRingtone = true
             val ringtoneUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             ringtone = RingtoneManager.getRingtone(applicationContext, ringtoneUri)
-            Toast.makeText(applicationContext, "Alarm Started!", Toast.LENGTH_SHORT).show()
-            Log.i("Alarm", "Alarm Started!")
+            val tst = String.format("Alarm started at %02d:%02d", inputHour, inputMinutes)
+            Toast.makeText(applicationContext, tst, Toast.LENGTH_SHORT).show()
+            Log.i("Alarm", tst)
             ringtone?.play()
             hourPlayed = currHour
             minutePlayed = currMinute
@@ -85,8 +86,8 @@ class StartService : Service() {
         val inputMinutes1 = intent?.getIntExtra("minute1", 0)
         val inputHour2 = intent?.getIntExtra("hour2", 0)
         val inputMinutes2 = intent?.getIntExtra("minute2", 0)
-        timeString = String.format("Time received are %02d:%02d and %02d:%02d", inputHour1, inputMinutes1, inputHour2, inputMinutes2)
-        Log.i("time received", timeString)
+        timeString = String.format("Time received in Service are %02d:%02d and %02d:%02d", inputHour1, inputMinutes1, inputHour2, inputMinutes2)
+        Log.i("Time received in Service", timeString)
 
         handler = Handler(Looper.getMainLooper())
         runnable = object : Runnable {

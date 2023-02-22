@@ -44,8 +44,8 @@ class MainFragment : Fragment(), TimePickerFragmentClass.TimePickerListener {
     private var min1: Int = 0
     private var hour2: Int = 0
     private var min2: Int = 0
-    var isAlarm1Set: Boolean = false
-    var isAlarm2Set: Boolean = false
+    private var isAlarm1Set: Boolean = false
+    private var isAlarm2Set: Boolean = false
     private var timeString: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
